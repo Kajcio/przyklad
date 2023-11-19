@@ -1,0 +1,159 @@
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+
+    public class p6 extends JFrame {
+    	
+    public int n = 25;
+    public int rr=0;
+	public int gg=0;
+	public int bb=0;
+	public MyComponent komponent;
+	
+	public class MyComponent extends JComponent{
+		protected void paintComponent(Graphics g) {
+			
+			int w=getWidth();
+			int h=getHeight();
+			int r=((w<h)?w:h)/8;
+			g.setColor(new Color(rr,gg,bb));
+			g.drawLine(0, 0, w/2, h/2);
+			g.drawLine(w/2,h/2,0,h);
+			g.drawLine(w,h/2,w/2,h);
+			g.drawLine(w/2,0,w,h/2);
+			for(int i=0;i<=n;i++){
+				int y=h*i/n;
+				int x=w*i/n;
+				if(y<h/2)
+					g.drawLine(0,y,x,y);	
+				   // g.drawLine();
+			    if(y>h/2) {
+				g.drawLine(w-x,y,0,y);
+			   // g.drawLine(w-w*i/n,y,w-w/2,y);
+			}
+
+			}
+			for(int i=0;i<=n;i++){
+				int x=w*i/n;
+				int y=h*i/n;
+				if(x>w/2) {
+					g.drawLine(x, h-y, x, 0);
+				}}
+			
+			
+			super.paintComponent(g);
+		}
+	}
+	public p6(String string) {
+		super(string);
+		Toolkit kit=Toolkit.getDefaultToolkit();
+		Dimension d=kit.getScreenSize();
+		setBounds(d.width/6,d.height/6,d.width*2/3,d.height*2/3);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+	    JPanel panel = new JPanel(new BorderLayout());
+	    add(panel,BorderLayout.SOUTH);
+	    
+	    final JSlider slider=new JSlider(1,100,n);
+	    slider.addChangeListener(new ChangeListener() {
+			
+			public void stateChanged(ChangeEvent e) {
+				n=slider.getValue();
+				komponent.repaint();
+				
+			}
+		});
+	     panel.add(slider);
+	     
+	     add(komponent = new MyComponent());
+	        JMenuBar mb=new JMenuBar();
+			JMenu m=new JMenu("Kolor");
+			JMenuItem mi=new JMenuItem("czerwony");
+			mi.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					rr=255; gg=0; bb=0;
+					komponent.repaint();
+				}
+			});
+			m.add(mi);
+			mi=new JMenuItem("zielony");
+			mi.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					gg=255; rr=0; bb=0;
+					komponent.repaint();
+				}
+			});
+			m.add(mi);
+			mi=new JMenuItem("niebieski");
+			mi.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					bb=255; rr=0; gg=0;
+					komponent.repaint();
+				}
+			});
+			m.add(mi);
+			mb.add(m);
+			setJMenuBar(mb);
+			JPanel panelE=new JPanel();
+			JPanel panelW=new JPanel();
+			panel.add(panelE,BorderLayout.EAST);
+			panel.add(panelW,BorderLayout.WEST);
+
+			final JCheckBox cbR=new JCheckBox("R");
+			final JCheckBox cbG=new JCheckBox("G");
+			final JCheckBox cbB=new JCheckBox("B");
+			cbR.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					rr=(cbR.isSelected()?255:0);
+					komponent.repaint();
+				}
+			});
+			cbG.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					gg=(cbG.isSelected()?255:0);
+					komponent.repaint();
+				}
+			});
+			cbB.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					bb=(cbB.isSelected()?255:0);
+					komponent.repaint();
+				}
+			});
+			panelE.add(cbR);
+			panelE.add(cbG);
+			panelE.add(cbB);
+			setVisible(true);
+	}
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			
+			public void run() {
+				new p6("p6");
+				
+			}
+		});
+
+	}
+	}
+    
+
+
+ 
